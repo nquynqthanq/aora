@@ -9,7 +9,7 @@
     <img src="https://img.shields.io/badge/-Appwrite-black?style=for-the-badge&logoColor=white&logo=appwrite&color=FD366E" alt="appwrite" />
     <img src="https://img.shields.io/badge/NativeWind-black?style=for-the-badge&logoColor=white&logo=tailwindcss&color=06B6D4" alt="nativewind" />
   </div>
-    ### AORA
+    <h1>AORA</h1>
 </div>
 
 ## Table of Contents

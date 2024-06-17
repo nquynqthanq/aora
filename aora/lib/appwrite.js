@@ -255,3 +255,19 @@ export async function getLatestPosts() {
         throw new Error(error);
     }
 }
+
+// update user profile
+export async function updateUserProfile(userId, data) {
+    try {
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            userId,
+            data
+        );
+
+        return updatedUser;
+    } catch (error) {
+        throw new Error(error);
+    }
+}

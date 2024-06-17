@@ -4,13 +4,13 @@ import { FlatList, Image, RefreshControl, Text, View } from "react-native";
 
 import { images } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
-import { getAllPosts, getLatestPosts } from "../../lib/appwrite";
+import { getAllPosts, getLatestPosts, getCurrentUser } from "../../lib/appwrite";
 import { EmptyState, SearchInput, Trending, VideoCard } from "../../components";
 
 const Home = () => {
     const { data: posts, refetch } = useAppwrite(getAllPosts);
     const { data: latestPosts } = useAppwrite(getLatestPosts);
-
+    const { data: user } = useAppwrite(getCurrentUser);
     const [refreshing, setRefreshing] = useState(false);
 
     const onRefresh = async () => {
@@ -19,14 +19,8 @@ const Home = () => {
         setRefreshing(false);
     };
 
-    // one flatlist
-    // with list header
-    // and horizontal flatlist
-
-    //  we cannot do that with just scrollview as there's both horizontal and vertical scroll (two flat lists, within trending)
-
     return (
-        <SafeAreaView className="bg-primary">
+        <SafeAreaView className="bg-primary h-full">
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
@@ -47,7 +41,7 @@ const Home = () => {
                                     Welcome Back
                                 </Text>
                                 <Text className="text-2xl font-psemibold text-white">
-                                    JSMastery
+                                    {user?.username ?? "Unknown User"}
                                 </Text>
                             </View>
 

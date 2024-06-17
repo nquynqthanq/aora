@@ -1,12 +1,11 @@
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Image, FlatList, TouchableOpacity } from "react-native";
-
 import { icons } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
 import { getUserPosts, signOut } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
-import { EmptyState, InfoBox, VideoCard } from "../../components";
+import { CustomButton, EmptyState, InfoBox, VideoCard } from "../../components";
 
 const Profile = () => {
     const { user, setUser, setIsLogged } = useGlobalContext();
@@ -18,6 +17,10 @@ const Profile = () => {
         setIsLogged(false);
 
         router.replace("/sign-in");
+    };
+
+    const editProfile = () => {
+        router.push("../other/edit-profile");
     };
 
     return (
@@ -35,10 +38,17 @@ const Profile = () => {
                     />
                 )}
                 ListEmptyComponent={() => (
-                    <EmptyState
-                        title="No Videos Found"
-                        subtitle="No videos found for this profile"
-                    />
+                    <>
+                        <EmptyState
+                            title="No Videos Found"
+                            subtitle="No videos found for this profile"
+                        />
+                        <CustomButton
+                            title="Back to Explore"
+                            handlePress={() => router.push("/home")}
+                            containerStyles="w-[90%] my-5 mx-auto"
+                        />
+                    </>
                 )}
                 ListHeaderComponent={() => (
                     <View className="w-full flex justify-center items-center mt-6 mb-12 px-4">
@@ -53,13 +63,13 @@ const Profile = () => {
                             />
                         </TouchableOpacity>
 
-                        <View className="w-16 h-16 border border-secondary rounded-lg flex justify-center items-center">
+                        <TouchableOpacity className="w-16 h-16 border border-secondary rounded-lg flex justify-center items-center" onPress={editProfile}>
                             <Image
                                 source={{ uri: user?.avatar }}
                                 className="w-[90%] h-[90%] rounded-lg"
                                 resizeMode="cover"
                             />
-                        </View>
+                        </TouchableOpacity>
 
                         <InfoBox
                             title={user?.username}

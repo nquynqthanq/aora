@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
-
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
 import { getCurrentUser, signIn } from "../../lib/appwrite";
@@ -20,6 +19,7 @@ const SignIn = () => {
     const submit = async () => {
         if (form.email === "" || form.password === "") {
             Alert.alert("Error", "Please fill in all fields");
+            return;
         }
 
         setSubmitting(true);

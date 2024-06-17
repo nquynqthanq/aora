@@ -1,6 +1,6 @@
 <div align="center">
   <br />
-      <img src="https://i.postimg.cc/5NR9bxFM/Sora-README.png" alt="Project Banner">
+      <img src="./aora/assets/images/git-banner.png" alt="Project Banner">
     </a>
   <br />
   <h1>AORA</h1>

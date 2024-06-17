@@ -3,9 +3,7 @@
       <img src="https://i.postimg.cc/5NR9bxFM/Sora-README.png" alt="Project Banner">
     </a>
   <br />
-    <div>
-      <h1>AORA</h1>
-    </div>
+  <h1>AORA</h1>
   <div>
     <img src="https://img.shields.io/badge/-React_Native-black?style=for-the-badge&logoColor=white&logo=react&color=61DAFB" alt="react.js" />
     <img src="https://img.shields.io/badge/-Appwrite-black?style=for-the-badge&logoColor=white&logo=appwrite&color=FD366E" alt="appwrite" />

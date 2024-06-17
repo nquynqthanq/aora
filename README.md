@@ -72,19 +72,18 @@ Before you begin, ensure you have met the following requirements:
 
 ## Folder Structure
 
-MyReactNativeApp
-├── assets # Asset files (images, fonts, etc.)
-├── components # Reusable components
-├── navigation # Navigation setup
-├── screens # Screen components
-├── styles # Styling files
-├── App.js # Entry point of the application
-├── app.json # Expo configuration
-├── babel.config.js # Babel configuration
-├── package.json # Project dependencies and scripts
-├── tailwind.config.js # Tailwind CSS configuration
-└── .env # Environment variables
-
+    MyReactNativeApp
+    ├── assets              # Asset files (images, fonts, etc.)
+    ├── components          # Reusable components
+    ├── navigation          # Navigation setup
+    ├── screens             # Screen components
+    ├── styles              # Styling files
+    ├── App.js              # Entry point of the application
+    ├── app.json            # Expo configuration
+    ├── babel.config.js     # Babel configuration
+    ├── package.json        # Project dependencies and scripts
+    ├── tailwind.config.js  # Tailwind CSS configuration
+    └── .env                # Environment variables
 
 ## Contributing
 

@@ -71,7 +71,7 @@ Before you begin, ensure you have met the following requirements:
 
 1. Clone the repository
     ```sh
-    git clone https://github.com/nguynqthawq/MyReactNativeApp.git](https://github.com/nguynqthawq/aora-app.git
+    git clone https://github.com/nguynqthawq/aora-app.git
     cd aora-app
     ```
 

@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, Image, RefreshControl, Text, View } from "react-native";
-
 import { images } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
 import { getAllPosts, getLatestPosts, getCurrentUser } from "../../lib/appwrite";
 import { EmptyState, SearchInput, Trending, VideoCard } from "../../components";
-
 const Home = () => {
     const { data: posts, refetch } = useAppwrite(getAllPosts);
     const { data: latestPosts } = useAppwrite(getLatestPosts);
@@ -31,6 +29,7 @@ const Home = () => {
                         video={item.video}
                         creator={item.creator.username}
                         avatar={item.creator.avatar}
+                        isUserPost={item.creator.accountId === user?.accountId}
                     />
                 )}
                 ListHeaderComponent={() => (
@@ -54,9 +53,9 @@ const Home = () => {
                             </View>
                         </View>
 
-                        <SearchInput />
+                        <SearchInput placeholder="Search for a video topic" />
 
-                        <View className="w-full flex-1 pt-5 pb-8">
+                        <View className="flex-1 w-full pt-2 pb-2">
                             <Text className="text-lg font-pregular text-gray-100 mb-3">
                                 Latest Videos
                             </Text>

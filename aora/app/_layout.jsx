@@ -31,10 +31,6 @@ const RootLayout = () => {
         return null;
     }
 
-    if (!fontsLoaded && !error) {
-        return null;
-    }
-
     return (
         <GlobalProvider>
             <Stack>

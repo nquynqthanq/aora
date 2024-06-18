@@ -4,7 +4,7 @@ import { View, TouchableOpacity, Image, TextInput, Alert } from "react-native";
 
 import { icons } from "../constants";
 
-const SearchInput = ({ initialQuery }) => {
+const SearchInput = ({ initialQuery, placeholder }) => {
     const pathname = usePathname();
     const [query, setQuery] = useState(initialQuery || "");
 
@@ -13,7 +13,7 @@ const SearchInput = ({ initialQuery }) => {
             <TextInput
                 className="text-base mt-0.5 text-white flex-1 font-pregular"
                 value={query}
-                placeholder="Search a video topic"
+                placeholder={placeholder || "Search..."}
                 placeholderTextColor="#CDCDE0"
                 onChangeText={(e) => setQuery(e)}
             />

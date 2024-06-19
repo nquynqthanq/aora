@@ -6,6 +6,8 @@ import Loader from "./Loader";
 import Trending from "./Trending";
 import SearchInput from "./SearchInput";
 import EmptyState from "./EmptyState";
+import CustomAlert from "./CustomAlert";
+import CustomToast from "./CustomToast";
 
 export {
     VideoCard,
@@ -16,4 +18,6 @@ export {
     Trending,
     SearchInput,
     EmptyState,
+    CustomAlert,
+    CustomToast,
 };

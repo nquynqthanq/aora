@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
+import { View, Text, ScrollView, Dimensions, Image } from "react-native";
 
 import { images } from "../../constants";
 import { createUser } from "../../lib/appwrite";
 import { CustomButton, FormField } from "../../components";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { useToast } from "../../context/ToastProvider";
 
 const SignUp = () => {
     const { setUser, setIsLogged } = useGlobalContext();
-
+    const showToast = useToast();
     const [isSubmitting, setSubmitting] = useState(false);
     const [form, setForm] = useState({
         username: "",
@@ -20,7 +21,8 @@ const SignUp = () => {
 
     const submit = async () => {
         if (form.username === "" || form.email === "" || form.password === "") {
-            Alert.alert("Error", "Please fill in all fields");
+            showToast("Error", "Please fill in all fields");
+            return;
         }
 
         setSubmitting(true);
@@ -31,7 +33,8 @@ const SignUp = () => {
 
             router.replace("/home");
         } catch (error) {
-            Alert.alert("Error", error.message);
+            showToast("Error", error.message);
+            console.log(error.message);
         } finally {
             setSubmitting(false);
         }

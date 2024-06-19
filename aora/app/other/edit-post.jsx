@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { router } from "expo-router";
+import React, { useState, useEffect } from "react";
 import { ResizeMode, Video } from "expo-av";
 import * as DocumentPicker from "expo-document-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -10,15 +9,15 @@ import {
     TouchableOpacity,
     ScrollView,
 } from "react-native";
-
 import { icons } from "../../constants";
-import { createVideoPost } from "../../lib/appwrite";
+import { updatePost } from "../../lib/appwrite";
 import { CustomButton, FormField } from "../../components";
-import { useGlobalContext } from "../../context/GlobalProvider";
+import { useLocalSearchParams } from "expo-router";
+import { getPostById } from "../../lib/appwrite";
 import { useToast } from "../../context/ToastProvider";
 
-const Create = () => {
-    const { user } = useGlobalContext();
+const EditPost = () => {
+    const { videoId } = useLocalSearchParams();
     const [uploading, setUploading] = useState(false);
     const [form, setForm] = useState({
         title: "",
@@ -26,7 +25,27 @@ const Create = () => {
         thumbnail: null,
         prompt: "",
     });
+    // const [toastVisible, setToastVisible] = useState(false);
+    // const [toastMessage, setToastMessage] = useState("");
+    // const [toastTitle, setToastTitle] = useState("");
+
     const toast = useToast();
+
+    useEffect(() => {
+        if (videoId) {
+            const fetchPost = async () => {
+                const post = await getPostById(videoId);
+                setForm({
+                    title: post.title,
+                    video: post.video,
+                    thumbnail: post.thumbnail,
+                    prompt: post.prompt,
+                });
+            };
+
+            fetchPost();
+        }
+    }, [videoId]);
 
     const openPicker = async (selectType) => {
         const result = await DocumentPicker.getDocumentAsync({
@@ -51,48 +70,62 @@ const Create = () => {
                 });
             }
         } else {
+            // setTimeout(() => {
+            //     setToastTitle("Error");
+            //     setToastMessage("No file selected");
+            //     setToastVisible(true);
+            // }, 100);
             toast("Error", "No file selected");
         }
     };
 
-    const submit = async () => {
+    const update = async () => {
         if (
             (form.prompt === "") |
             (form.title === "") |
             !form.thumbnail |
             !form.video
         ) {
-            toast("Error", "Please fill all the fields");
-            return;
+            return (
+                // setToastTitle("Error"),
+                // setToastMessage("All fields are required"),
+                // setToastVisible(true),
+                // setTimeout(() => {
+                //     setToastVisible(false);
+                // }, 2500)
+                toast("Error", "Please fill all the fields")
+            )
         }
 
         setUploading(true);
+
         try {
-            await createVideoPost({
-                ...form,
-                userId: user.$id,
-            });
+            await updatePost(videoId, form);
 
-            toast("Success", "Post uploaded successfully");
-            router.push("/home");
+            // setToastTitle("Success");
+            // setToastMessage("Post updated successfully");
+            // setUploading(false);
+            // setToastVisible(true);
+            // setTimeout(() => {
+            //     setToastVisible(false);
+            // }, 2500);
+            toast("Success", "Post updated successfully");
         } catch (error) {
-            toast("Error", "An error occurred while uploading the post");
-        } finally {
-            setForm({
-                title: "",
-                video: null,
-                thumbnail: null,
-                prompt: "",
-            });
-
-            setUploading(false);
+            // setUploading(false);
+            // setToastTitle("Error");
+            // setToastMessage("An error occurred while updating post");
+            // setToastVisible(true);
+            // setTimeout(() => {
+            //     setToastVisible(false);
+            // }, 2500);
+            toast("Error", "An error occurred while updating post");
         }
     };
 
     return (
         <SafeAreaView className="bg-primary h-full">
-            <ScrollView className="px-4 my-6">
-                <Text className="text-2xl text-white font-psemibold">Upload Video</Text>
+            <ScrollView className="px-4">
+                <Text className="text-2xl text-white font-psemibold">Edit Video</Text>
 
                 <FormField
                     title="Video Title"
@@ -168,19 +201,19 @@ const Create = () => {
                 />
 
                 <CustomButton
-                    title="Submit & Publish"
-                    handlePress={submit}
-                    containerStyles="mt-7"
+                    title="Update & Submit"
+                    handlePress={update}
+                    containerStyles="mt-7 mb-10"
                     isLoading={uploading}
                 />
                 {/* <CustomToast
-                    title={toastTitle}
-                    message={toastMessage}
-                    isVisible={toastVisible}
+                title={toastTitle}
+                message={toastMessage}
+                isVisible={toastVisible}
                 /> */}
             </ScrollView>
         </SafeAreaView>
     );
 };
 
-export default Create;
+export default EditPost;

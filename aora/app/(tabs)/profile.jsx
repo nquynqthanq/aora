@@ -3,13 +3,18 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { View, Image, FlatList, TouchableOpacity } from "react-native";
 import { icons } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
-import { getUserPosts, signOut } from "../../lib/appwrite";
+import { getUserPosts, signOut, getTotalFollower, getTotalFollowing } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
 import { CustomButton, EmptyState, InfoBox, VideoCard } from "../../components";
 
 const Profile = () => {
     const { user, setUser, setIsLogged } = useGlobalContext();
     const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
+    const { data: followers } = useAppwrite(() => getTotalFollower(user.$id, user.$id));
+    const { data: followings } = useAppwrite(() => getTotalFollowing());
+
+    console.log("FOLLOWERS", followers);
+    console.log("FOLLOWINGS", followings);
 
     const logout = async () => {
         await signOut();
@@ -35,6 +40,10 @@ const Profile = () => {
                         video={item.video}
                         creator={item.creator.username}
                         avatar={item.creator.avatar}
+                        isUserPost={item.creator.$id === user?.$id}
+                        videoId={item.$id}
+                        isBottomShow={false}
+                        creatorId={item.creator.$id}
                     />
                 )}
                 ListEmptyComponent={() => (
@@ -82,12 +91,19 @@ const Profile = () => {
                                 title={posts.length || 0}
                                 subtitle="Posts"
                                 titleStyles="text-xl"
-                                containerStyles="mr-10"
+                                containerStyles="flex-1"
                             />
                             <InfoBox
-                                title="1.2k"
+                                title={followers?.length || 0}
                                 subtitle="Followers"
                                 titleStyles="text-xl"
+                                containerStyles="flex-1"
+                            />
+                            <InfoBox
+                                title={followings?.length || 0}
+                                subtitle="Followings"
+                                titleStyles="text-xl"
+                                containerStyles="flex-1"
                             />
                         </View>
                     </View>

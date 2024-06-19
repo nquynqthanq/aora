@@ -27,9 +27,12 @@ const Home = () => {
                         title={item.title}
                         thumbnail={item.thumbnail}
                         video={item.video}
-                        creator={item.creator.username}
+                        creator={item?.creator.username}
                         avatar={item.creator.avatar}
-                        isUserPost={item.creator.accountId === user?.accountId}
+                        isUserPost={item.creator.$id === user?.$id}
+                        videoId={item.$id}
+                        isBottomShow={true}
+                        creatorId={item.creator.$id}
                     />
                 )}
                 ListHeaderComponent={() => (

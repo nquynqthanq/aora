@@ -2,14 +2,16 @@
 import { useState } from "react";
 import { Link, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
+import { View, Text, ScrollView, Dimensions, Image } from "react-native";
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
 import { getCurrentUser, signIn } from "../../lib/appwrite";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { useToast } from "../../context/ToastProvider";
 
 const SignIn = () => {
     const { setUser, setIsLogged } = useGlobalContext();
+    const showToast = useToast();
     const [isSubmitting, setSubmitting] = useState(false);
     const [form, setForm] = useState({
         email: "",
@@ -18,7 +20,7 @@ const SignIn = () => {
 
     const submit = async () => {
         if (form.email === "" || form.password === "") {
-            Alert.alert("Error", "Please fill in all fields");
+            showToast("Error", "Please fill in all fields");
             return;
         }
 
@@ -29,11 +31,10 @@ const SignIn = () => {
             const result = await getCurrentUser();
             setUser(result);
             setIsLogged(true);
-
-            Alert.alert("Success", "User signed in successfully");
+            setTimeout(() => showToast("Success", "Logged in successfully"), 2500);
             router.replace("/home");
         } catch (error) {
-            Alert.alert("Error", error.message);
+            showToast("Error", error.message);
             console.log(error.message);
         } finally {
             setSubmitting(false);

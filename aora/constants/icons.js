@@ -11,6 +11,11 @@ import logout from "../assets/icons/logout.png";
 import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
+import like from "../assets/icons/like.png";
+import unlike from "../assets/icons/unlike.png";
+import saved from "../assets/icons/saved.png";
+import unsaved from "../assets/icons/unsaved.png";
+import comment from "../assets/icons/comment.png";
 
 export default {
     play,
@@ -26,4 +31,9 @@ export default {
     logout,
     eyeHide,
     eye,
+    like,
+    unlike,
+    saved,
+    unsaved,
+    comment,
 };

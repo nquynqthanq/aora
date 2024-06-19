@@ -75,7 +75,6 @@ export async function signIn(email, password) {
     }
 }
 
-
 // Get Account
 export async function getAccount() {
     try {
@@ -269,5 +268,327 @@ export async function updateUserProfile(userId, data) {
         return updatedUser;
     } catch (error) {
         throw new Error(error);
+    }
+}
+
+// Save video
+export async function saveVideo(videoId) {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw Error;
+
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            user.$id,
+            {
+                videoIds: [...user.videoIds, videoId],
+            }
+        );
+
+        return updatedUser;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Unsave video
+export async function unsaveVideo(videoId) {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw Error;
+
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            user.$id,
+            {
+                videoIds: user.videoIds.filter((id) => id !== videoId),
+            }
+        );
+
+        return updatedUser;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Get saved videos
+export async function getSavedVideos() {
+    try {
+        const user = await getCurrentUser();
+        if (!user || !user.videoIds) throw Error;
+
+        const promises = user.videoIds.map((id) => {
+            return databases.listDocuments(
+                appwriteConfig.databaseId,
+                appwriteConfig.videoCollectionId,
+                [Query.equal("$id", id)]
+            );
+        });
+
+        const savedVideos = await Promise.all(promises);
+
+        return savedVideos.flatMap(video => video.documents);
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+}
+
+// Delete video post
+export async function deleteVideoPost(videoId) {
+    try {
+        const deletedPost = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.videoCollectionId,
+            videoId
+        );
+
+        return deletedPost;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Get video post by id
+export async function getPostById(videoId) {
+    try {
+        const post = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.videoCollectionId,
+            videoId
+        );
+
+        return post;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Update Post
+export async function updatePost(videoId, data) {
+    try {
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.videoCollectionId,
+            videoId,
+            data
+        );
+
+        return updatedPost;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Like video
+export async function likeVideo(videoId) {
+    try {
+        const post = await getPostById(videoId);
+        if (!post) throw Error;
+
+        const user = await getCurrentUser();
+        if (!user) throw Error;
+
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.videoCollectionId,
+            videoId,
+            {
+                likes: post.likes + 1,
+            }
+        );
+
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            user.$id,
+            {
+                likes: [...user.likes, videoId],
+            }
+        );
+
+        return updatedPost && updatedUser;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Unlike video
+export async function unlikeVideo(videoId) {
+    try {
+        const post = await getPostById(videoId);
+        if (!post) throw Error;
+        const user = await getCurrentUser();
+        if (!user) throw Error;
+
+        const updatedPost = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.videoCollectionId,
+            videoId,
+            {
+                likes: post.likes - 1,
+            }
+        );
+
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            user.$id,
+            {
+                likes: user.likes.filter((id) => id !== videoId),
+            }
+        );
+
+        return updatedPost && updatedUser;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Get like videos
+export async function getLikedVideos() {
+    try {
+        const user = await getCurrentUser();
+        if (!user || !user.likes) throw Error;
+
+        const promises = user.likes.map((id) => {
+            return databases.listDocuments(
+                appwriteConfig.databaseId,
+                appwriteConfig.videoCollectionId,
+                [Query.equal("$id", id)]
+            );
+        });
+
+        const likedVideos = await Promise.all(promises);
+
+        return likedVideos.flatMap(video => video.documents);
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+}
+
+// Get total likes of a video
+export async function getTotalLikes(videoId) {
+    try {
+        const post = await getPostById(videoId);
+        if (!post) throw Error;
+
+        return post.likes;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Follow user
+export async function follow(userId) {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw new Error('User not found');
+
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            user.$id,
+            {
+                following: [...user.following, userId],
+            }
+        );
+
+        return updatedUser;
+    } catch (error) {
+        throw new Error(`Error following user: ${error.message}`);
+    }
+}
+
+// Unfollow user
+export async function unfollow(userId) {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw new Error('User not found');
+
+        const updatedUser = await databases.updateDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            user.$id,
+            {
+                following: user.following.filter((id) => id !== userId),
+            }
+        );
+
+        return updatedUser;
+    } catch (error) {
+        throw new Error(`Error unfollowing user: ${error.message}`);
+    }
+}
+
+// Get list user that current user is following
+export async function getFollowings() {
+    try {
+        const user = await getCurrentUser();
+        if (!user || !user.following) throw new Error('User not found or no following list');
+
+        const promises = user.following.map((id) => {
+            return databases.listDocuments(
+                appwriteConfig.databaseId,
+                appwriteConfig.userCollectionId,
+                [Query.equal("$id", id)]
+            );
+        });
+
+        const following = await Promise.all(promises);
+
+        return following.flatMap(user => user.documents);
+    } catch (error) {
+        console.error(error);
+        throw new Error(`Error fetching following users: ${error.message}`);
+    }
+}
+
+// Get total followings
+export async function getTotalFollowing() {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw new Error('User not found');
+
+        return user.following;
+    } catch (error) {
+        console.error(error);
+        throw new Error(`Error fetching followers: ${error.message}`);
+    }
+}
+
+// Get total followers
+export async function getTotalFollower() {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw new Error('User not found');
+
+        // Query to find users who have the current user's ID in their following array
+        const followers = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.search("following", user.$id)]
+        );
+
+        return followers.documents;
+    } catch (error) {
+        console.error(error);
+        throw new Error(`Error fetching followers: ${error.message}`);
+    }
+}
+
+// Set is following status
+export async function isFollowing(userId) {
+    try {
+        const user = await getCurrentUser();
+        if (!user) return false;
+
+        return user.following.includes(userId);
+    } catch (error) {
+        console.error(error);
+        throw new Error(`Error checking following status: ${error.message}`);
     }
 }

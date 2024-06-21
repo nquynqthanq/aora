@@ -16,7 +16,9 @@ import unlike from "../assets/icons/unlike.png";
 import saved from "../assets/icons/saved.png";
 import unsaved from "../assets/icons/unsaved.png";
 import comment from "../assets/icons/comment.png";
-
+import searchuser from "../assets/icons/search-user.png";
+import dot from "../assets/icons/dot.png";
+import chat from "../assets/icons/chat.png";
 export default {
     play,
     bookmark,
@@ -36,4 +38,7 @@ export default {
     saved,
     unsaved,
     comment,
+    searchuser,
+    dot,
+    chat,
 };

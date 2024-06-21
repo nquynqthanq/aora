@@ -25,9 +25,6 @@ const EditPost = () => {
         thumbnail: null,
         prompt: "",
     });
-    // const [toastVisible, setToastVisible] = useState(false);
-    // const [toastMessage, setToastMessage] = useState("");
-    // const [toastTitle, setToastTitle] = useState("");
 
     const toast = useToast();
 
@@ -70,11 +67,6 @@ const EditPost = () => {
                 });
             }
         } else {
-            // setTimeout(() => {
-            //     setToastTitle("Error");
-            //     setToastMessage("No file selected");
-            //     setToastVisible(true);
-            // }, 100);
             toast("Error", "No file selected");
         }
     };
@@ -87,12 +79,6 @@ const EditPost = () => {
             !form.video
         ) {
             return (
-                // setToastTitle("Error"),
-                // setToastMessage("All fields are required"),
-                // setToastVisible(true),
-                // setTimeout(() => {
-                //     setToastVisible(false);
-                // }, 2500)
                 toast("Error", "Please fill all the fields")
             )
         }
@@ -101,23 +87,8 @@ const EditPost = () => {
 
         try {
             await updatePost(videoId, form);
-
-            // setToastTitle("Success");
-            // setToastMessage("Post updated successfully");
-            // setUploading(false);
-            // setToastVisible(true);
-            // setTimeout(() => {
-            //     setToastVisible(false);
-            // }, 2500);
             toast("Success", "Post updated successfully");
         } catch (error) {
-            // setUploading(false);
-            // setToastTitle("Error");
-            // setToastMessage("An error occurred while updating post");
-            // setToastVisible(true);
-            // setTimeout(() => {
-            //     setToastVisible(false);
-            // }, 2500);
             toast("Error", "An error occurred while updating post");
         }
     };
@@ -206,11 +177,6 @@ const EditPost = () => {
                     containerStyles="mt-7 mb-10"
                     isLoading={uploading}
                 />
-                {/* <CustomToast
-                title={toastTitle}
-                message={toastMessage}
-                isVisible={toastVisible}
-                /> */}
             </ScrollView>
         </SafeAreaView>
     );

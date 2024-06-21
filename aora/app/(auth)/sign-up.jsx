@@ -15,19 +15,20 @@ const SignUp = () => {
     const [isSubmitting, setSubmitting] = useState(false);
     const [form, setForm] = useState({
         username: "",
+        nickname: "",
         email: "",
         password: "",
     });
 
     const submit = async () => {
-        if (form.username === "" || form.email === "" || form.password === "") {
+        if (form.username === "" || nickname === "" || form.email === "" || form.password === "") {
             showToast("Error", "Please fill in all fields");
             return;
         }
 
         setSubmitting(true);
         try {
-            const result = await createUser(form.email, form.password, form.username);
+            const result = await createUser(form.email, form.password, form.username, form.nickname);
             setUser(result);
             setIsLogged(true);
 
@@ -63,6 +64,13 @@ const SignUp = () => {
                         title="Username"
                         value={form.username}
                         handleChangeText={(e) => setForm({ ...form, username: e })}
+                        otherStyles="mt-10"
+                    />
+
+                    <FormField
+                        title="Nickname"
+                        value={form.nickname}
+                        handleChangeText={(e) => setForm({ ...form, nickname: e })}
                         otherStyles="mt-10"
                     />
 

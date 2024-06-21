@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FlatList, Image, RefreshControl, Text, View } from "react-native";
+import { FlatList, Image, RefreshControl, Text, View, TouchableOpacity } from "react-native";
 import { images } from "../../constants";
 import useAppwrite from "../../lib/useAppwrite";
 import { getAllPosts, getLatestPosts, getCurrentUser } from "../../lib/appwrite";
 import { EmptyState, SearchInput, Trending, VideoCard } from "../../components";
+import { router } from "expo-router";
 const Home = () => {
     const { data: posts, refetch } = useAppwrite(getAllPosts);
     const { data: latestPosts } = useAppwrite(getLatestPosts);
@@ -16,6 +17,10 @@ const Home = () => {
         await refetch();
         setRefreshing(false);
     };
+
+    // const chat = () => {
+    //     router.replace("chat")
+    // }
 
     return (
         <SafeAreaView className="bg-primary h-full">
@@ -50,7 +55,7 @@ const Home = () => {
                             <View className="mt-1.5">
                                 <Image
                                     source={images.logoSmall}
-                                    className="w-9 h-10"
+                                    className="w-8 h-8"
                                     resizeMode="contain"
                                 />
                             </View>

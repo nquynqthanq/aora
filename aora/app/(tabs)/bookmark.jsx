@@ -17,13 +17,16 @@ const Bookmark = () => {
         setRefreshing(false);
     };
     return (
-        <SafeAreaView className="px-4 my-6 bg-primary h-full">
-            <View className="flex flex-row justify-between items-center mb-5">
-                <Text className="text-2xl font-psemibold text-white">Bookmarks</Text>
+        <SafeAreaView className="bg-primary h-full">
+            <View className="flex my-6 px-4 space-y-6">
+                <View className="flex flex-row justify-between items-center mb-5">
+                    <Text className="text-2xl font-psemibold text-white">Bookmarks</Text>
+                </View>
+
+                <SearchInput placeholder="Search your saved videos" />
+
+
             </View>
-
-            <SearchInput placeholder="Search your saved videos" />
-
             <FlatList
                 data={posts}
                 keyExtractor={(item) => item.$id}
@@ -49,7 +52,6 @@ const Bookmark = () => {
                 refreshControl={
                     <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
-                className="mt-10"
             />
         </SafeAreaView>
     );

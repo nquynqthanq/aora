@@ -13,9 +13,6 @@ const Profile = () => {
     const { data: followers } = useAppwrite(() => getTotalFollower(user.$id, user.$id));
     const { data: followings } = useAppwrite(() => getTotalFollowing());
 
-    console.log("FOLLOWERS", followers);
-    console.log("FOLLOWINGS", followings);
-
     const logout = async () => {
         await signOut();
         setUser(null);

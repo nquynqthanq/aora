@@ -16,6 +16,8 @@ export const appwriteConfig = {
     databaseId: "666fac4f0006ddd63701",
     userCollectionId: "666fac69000dfe0fdaaa",
     videoCollectionId: "666fac7f00228e796ce2",
+    chatCollectionId: "6675750300384c8e79a4",
+    messageCollectionId: "6675752e0014dc9db359",
 };
 
 const client = new Client();
@@ -31,13 +33,14 @@ const avatars = new Avatars(client);
 const databases = new Databases(client);
 
 // Register user
-export async function createUser(email, password, username) {
+export async function createUser(email, password, username, nickname) {
     try {
         const newAccount = await account.create(
             ID.unique(),
             email,
             password,
-            username
+            username,
+            nickname
         );
 
         if (!newAccount) throw Error;
@@ -54,6 +57,7 @@ export async function createUser(email, password, username) {
                 accountId: newAccount.$id,
                 email: email,
                 username: username,
+                nickname: nickname,
                 avatar: avatarUrl,
             }
         );
@@ -580,6 +584,22 @@ export async function getTotalFollower() {
     }
 }
 
+// Get followers by user id
+export async function getFollowersById(userId) {
+    try {
+        const followers = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.search("following", userId)]
+        );
+
+        return followers.documents;
+    } catch (error) {
+        console.error(error);
+        throw new Error(`Error fetching followers: ${error.message}`);
+    }
+}
+
 // Set is following status
 export async function isFollowing(userId) {
     try {
@@ -590,5 +610,141 @@ export async function isFollowing(userId) {
     } catch (error) {
         console.error(error);
         throw new Error(`Error checking following status: ${error.message}`);
+    }
+}
+
+// get user by id
+export async function getUserById(userId) {
+    try {
+        const user = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            userId
+        );
+
+        return user;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Get Users list without current user
+export async function getUsers() {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw new Error('User not found');
+
+        const users = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.notEqual("$id", user.$id)]
+        );
+
+        return users.documents;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Get posts from the last 7 days
+export async function getNewPosts(userId) {
+    try {
+        const posts = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.videoCollectionId,
+            [Query.equal("$id", userId), Query.greaterThan("$createdAt", Date.now() - 604800000)]
+        );
+
+        return posts.documents;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Get chats document
+export async function getChats() {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw new Error('User not found');
+
+        const chats = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.chatCollectionId,
+            [Query.equal("members", user.$id)]
+        );
+
+        return chats.documents;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Get messages document
+export async function getMessages(chatId) {
+    try {
+        const messages = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.messageCollectionId,
+            [Query.equal("chatId", chatId)]
+        );
+
+        return messages.documents;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Create chat
+export async function createChat(members, latestMessage) {
+    try {
+        const newChat = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.chatCollectionId,
+            ID.unique(),
+            {
+                members,
+                latestMessage,
+            }
+        );
+
+        return newChat;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Create message
+export async function createMessage(chatId, text, senderId) {
+    try {
+        const newMessage = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.messageCollectionId,
+            ID.unique(),
+            {
+                chatId,
+                text,
+                senderId,
+                createdAt: Date.now(),
+            }
+        );
+
+        return newMessage;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+// Create first chat when following
+export async function createFirstChat(followingId) {
+    try {
+        const user = await getCurrentUser();
+        if (!user) throw new Error('User not found');
+
+        const newChat = await createChat([user.$id, followingId], newMessage);
+        const newMessage = createMessage(newChat.$id, "Say hi 👋", user.$id);
+
+        return newChat && newMessage;
+    } catch (error) {
+        throw new Error(error);
     }
 }

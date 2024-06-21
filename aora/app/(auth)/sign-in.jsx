@@ -31,7 +31,7 @@ const SignIn = () => {
             const result = await getCurrentUser();
             setUser(result);
             setIsLogged(true);
-            setTimeout(() => showToast("Success", "Logged in successfully"), 2500);
+            showToast("Success", "Logged in successfully");
             router.replace("/home");
         } catch (error) {
             showToast("Error", error.message);

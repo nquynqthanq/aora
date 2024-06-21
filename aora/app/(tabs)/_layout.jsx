@@ -76,6 +76,22 @@ const TabLayout = () => {
                 />
 
                 <Tabs.Screen
+                    name="search-user"
+                    options={{
+                        title: "Search",
+                        headerShown: false,
+                        tabBarIcon: ({ color, focused }) => (
+                            <TabIcon
+                                icon={icons.searchuser}
+                                color={color}
+                                name="Search"
+                                focused={focused}
+                            />
+                        ),
+                    }}
+                />
+
+                <Tabs.Screen
                     name="create"
                     options={{
                         title: "Create",
@@ -90,6 +106,21 @@ const TabLayout = () => {
                         ),
                     }}
                 />
+                {/* <Tabs.Screen
+                    name="chat"
+                    options={{
+                        title: "Chat",
+                        headerShown: false,
+                        tabBarIcon: ({ color, focused }) => (
+                            <TabIcon
+                                icon={icons.chat}
+                                color={color}
+                                name="Chat"
+                                focused={focused}
+                            />
+                        ),
+                    }}
+                /> */}
                 <Tabs.Screen
                     name="profile"
                     options={{

@@ -14,6 +14,7 @@ import {
     follow,
     unfollow,
     getTotalFollowing,
+    createFirstChat,
 } from "../lib/appwrite";
 import CustomAlert from "./CustomAlert";
 import { useRouter } from "expo-router";
@@ -150,6 +151,7 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video, isUserPost, video
             follow(creatorId)
                 .then(() => {
                     addFollowing(creatorId);
+                    createFirstChat(creatorId);
                 })
                 .catch((error) => {
                     console.error('Failed to follow:', error);
@@ -157,18 +159,26 @@ const VideoCard = ({ title, creator, avatar, thumbnail, video, isUserPost, video
         }
     };
 
+    const handleGoToProfile = () => {
+        if (isUserPost) {
+            router.replace('profile');
+        } else {
+            router.push({ pathname: '../other/other-user-profile', params: { userId: creatorId } });
+        }
+    }
+
     return (
         <View className="flex flex-col items-center px-4 mb-5">
             {isBottomShow && (
                 <View className="flex flex-row gap-3 items-start">
                     <View className="flex justify-center items-center flex-row flex-1">
-                        <View className="w-[46px] h-[46px] rounded-lg border border-secondary flex justify-center items-center p-0.5">
+                        <TouchableOpacity className="w-[46px] h-[46px] rounded-lg border border-secondary flex justify-center items-center p-0.5" onPress={handleGoToProfile}>
                             <Image
                                 source={{ uri: avatar }}
                                 className="w-full h-full rounded-lg"
                                 resizeMode="cover"
                             />
-                        </View>
+                        </TouchableOpacity>
 
                         <View className="flex justify-center flex-1 ml-3 gap-y-1">
                             <Text

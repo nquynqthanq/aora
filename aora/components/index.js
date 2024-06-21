@@ -8,6 +8,7 @@ import SearchInput from "./SearchInput";
 import EmptyState from "./EmptyState";
 import CustomAlert from "./CustomAlert";
 import CustomToast from "./CustomToast";
+import UserCard from "./UserCard";
 
 export {
     VideoCard,
@@ -20,4 +21,5 @@ export {
     EmptyState,
     CustomAlert,
     CustomToast,
+    UserCard,
 };

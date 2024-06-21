@@ -15,10 +15,6 @@ const EditProfile = () => {
     const [username, setUsername] = useState(user?.username);
     const [avatar, setAvatar] = useState(user?.avatar);
     const { setUser } = useGlobalContext();
-    // const [toastVisible, setToastVisible] = useState(false);
-    // const [toastMessage, setToastMessage] = useState("");
-    // const [toastTitle, setToastTitle] = useState("");
-
     const toast = useToast();
 
     useEffect(() => {
@@ -33,12 +29,6 @@ const EditProfile = () => {
             await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
             return (
-                // setToastTitle("Warning"),
-                // setToastMessage("You need to enable permissions to access the library"),
-                // setToastVisible(true),
-                // setTimeout(() => {
-                //     setToastVisible(false);
-                // }, 2500)
                 toast("Warning", "You need to enable permissions to access the library")
             )
         }
@@ -55,14 +45,6 @@ const EditProfile = () => {
 
     const handleUpdate = async () => {
         if (!username || !avatar) {
-            // return (
-            //     setToastTitle("Warning"),
-            //     setToastMessage("Please fill all fields"),
-            //     setToastVisible(true),
-            //     setTimeout(() => {
-            //         setToastVisible(false);
-            //     }, 2500)
-            // )
             toast("Warning", "Please fill all fields")
             return;
         }
@@ -70,21 +52,9 @@ const EditProfile = () => {
         try {
             await updateUserProfile(user.$id, { username, avatar });
             await setUser({ ...user, username, avatar });
-            // setToastTitle("Success"),
-            //     setToastMessage("Profile updated successfully"),
-            //     setToastVisible(true),
-            //     setTimeout(() => {
-            //         setToastVisible(false);
-            //     }, 2500)
             toast("Success", "Profile updated successfully");
             router.replace("../(tabs)/profile");
         } catch (error) {
-            // setToastTitle("Error"),
-            //     setToastMessage("An error occurred while updating profile"),
-            //     setToastVisible(true),
-            //     setTimeout(() => {
-            //         setToastVisible(false);
-            //     }, 2500)
             toast("Error", "An error occurred while updating profile");
         }
     };

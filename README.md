@@ -22,7 +22,7 @@
 - [Contributing](#contributing)
 - [License](#license)
 
-## Introduction
+## Introduction 
 
 **AORA** is a mobile application built with React Native using the Expo framework. It leverages Tailwind CSS for styling and Appwrite for backend services such as authentication and database.
 
